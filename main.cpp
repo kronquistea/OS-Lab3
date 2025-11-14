@@ -4,7 +4,7 @@
     using std::cout;
 #include <fstream>
 #include <array>
-#include "memsim.cpp"
+#include "memsim.h"
 
 /// @brief Sets up and executes required functionality for the entire program but not for the actual page replacement algorithms.
 /// @param argc Number of parameters
@@ -46,11 +46,7 @@ int main(int argc, char* argv[]) {
     }
 
     fin.close();
-
-    std::vector<float> pageFaultRatesFIFO = fifo(frameSize, references);
-
     
-
     std::ofstream fout(outputFile);
     fout << "===============================\n";
     fout << "\tPage Replacement Algorithm Simulation (Frame Size = " << frameSize << ")\n";
@@ -58,7 +54,10 @@ int main(int argc, char* argv[]) {
     fout << "\t\t\tPage Fault Rates\n";
     fout << "Algorithm\tTotal Page Faults\t2000\t4000\t6000\t8000\t10000\n";
     fout << "-------------------------------\n";
-    // fout << "FIFO\t" << ;
+
+    fifo(frameSize, references, fout);
+
+    fout.close();
 
     return 0;
-}
+}   
