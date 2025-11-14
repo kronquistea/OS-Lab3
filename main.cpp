@@ -3,6 +3,8 @@
 #include <iostream>
     using std::cout;
 #include <fstream>
+#include <array>
+#include "memsim.cpp"
 
 /// @brief Sets up and executes required functionality for the entire program but not for the actual page replacement algorithms.
 /// @param argc Number of parameters
@@ -24,7 +26,39 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    /** Next Steps
+     *  1. Call FIFO page replacement algorithm - do this for the specified frame size that was sent in by the user.
+     *      a. Receive the page fault rates as an array of floats.
+     *      b. There will be 5 total entires in this returned array, where the first entry (index 0) is the page fault rate for the first 2000 references, and so on.
+     *      c. These 5 entries will be extracted and written into the specified output file that was given by the user.
+     *  2. Call LRU page replacement algorithm - do this for the specified frame size that was sent in by the user.
+     *      a. Do the same thing as for FIFO but now with LRU
+     *  3. Call OPT page replacement algorithm - do this for the specified frame size that was sent in by the user.
+     *      a. Do the same thing as for FIFO but now with OPT
+     */
+
+    std::array<int, 10000> references;
+    int value;
+    int i = 0;
+    while(fin >> value) {
+        references[i] = value;
+        i++;
+    }
+
     fin.close();
+
+    std::vector<float> pageFaultRatesFIFO = fifo(frameSize, references);
+
+    
+
+    std::ofstream fout(outputFile);
+    fout << "===============================\n";
+    fout << "\tPage Replacement Algorithm Simulation (Frame Size = " << frameSize << ")\n";
+    fout << "===============================\n";
+    fout << "\t\t\tPage Fault Rates\n";
+    fout << "Algorithm\tTotal Page Faults\t2000\t4000\t6000\t8000\t10000\n";
+    fout << "-------------------------------\n";
+    // fout << "FIFO\t" << ;
 
     return 0;
 }
