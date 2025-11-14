@@ -4,6 +4,7 @@
     using std::cout;
 #include <fstream>
 #include <array>
+#include <algorithm>
 #include "memsim.h"
 
 /// @brief Sets up and executes required functionality for the entire program but not for the actual page replacement algorithms.
@@ -55,7 +56,11 @@ int main(int argc, char* argv[]) {
     fout << "Algorithm\tTotal Page Faults\t2000\t4000\t6000\t8000\t10000\n";
     fout << "-------------------------------\n";
 
+    // Test set
+    // references = {7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2};
+
     fifo(frameSize, references, fout);
+    lru(frameSize, references, fout);
 
     fout.close();
 
