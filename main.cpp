@@ -17,9 +17,16 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    // cout << "Received arguments\n";
+
     int frameSize = atoi(argv[1]);
+    // cout << "Processed frame size parameter\n";
+
     const char* inputFile = argv[2];
+    // cout << "Processed input file\n";
+
     const char* outputFile = argv[3];
+    // cout << "Processed output file\n";
 
     std::ifstream fin(inputFile);
     if(!fin) {
@@ -38,13 +45,15 @@ int main(int argc, char* argv[]) {
      *      a. Do the same thing as for FIFO but now with OPT
      */
 
-    std::array<int, 10000> references;
+    // cout << "Before processing references\n";
+    std::vector<int> references;
     int value;
     int i = 0;
     while(fin >> value) {
-        references[i] = value;
+        references.push_back(value);
         i++;
     }
+    // cout << "After processing references: references.size() =" << references.size() << "\n";
 
     fin.close();
     
@@ -59,8 +68,11 @@ int main(int argc, char* argv[]) {
     // Test set
     // references = {7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2};
 
+    // cout << "Before calling fifO()\n";
+
     fifo(frameSize, references, fout);
     lru(frameSize, references, fout);
+    optimal(frameSize, references, fout);
 
     fout.close();
 
