@@ -6,6 +6,7 @@
 #include <iostream>
     using std::cout;
 #include <set>
+#include <iomanip>
 #include "memsim.h"
 
 /// @brief Exectues the FIFO page replacement algorithm
@@ -45,11 +46,11 @@ void fifo(int frameSize, std::vector<int> references, std::ofstream& fout) {
     pageFaultRates.push_back(static_cast<double>(pageFaults) / references.size());
 
     fout << "FIFO\t" << pageFaults << "\t" << 
-    pageFaultRates[0] << "\t" <<
-    pageFaultRates[1] << "\t" <<
-    pageFaultRates[2] << "\t" <<
-    pageFaultRates[3] << "\t" <<
-    pageFaultRates[4] << "\n";
+    std::setprecision(4) << pageFaultRates[0] << "\t" <<
+    std::setprecision(4) << pageFaultRates[1] << "\t" <<
+    std::setprecision(4) << pageFaultRates[2] << "\t" <<
+    std::setprecision(4) << pageFaultRates[3] << "\t" <<
+    std::setprecision(4) << pageFaultRates[4] << "\n";
 }
 
 /// @brief Least Recently Used algorithm
@@ -91,19 +92,26 @@ void lru(int frameSize, std::vector<int> references, std::ofstream& fout) {
     pageFaultRates.push_back(static_cast<double>(pageFaults) / references.size());
 
     fout << "LRU\t" << pageFaults << "\t" << 
-    pageFaultRates[0] << "\t" <<
-    pageFaultRates[1] << "\t" <<
-    pageFaultRates[2] << "\t" <<
-    pageFaultRates[3] << "\t" <<
-    pageFaultRates[4] << "\n";
+    std::setprecision(4) << pageFaultRates[0] << "\t" <<
+    std::setprecision(4) << pageFaultRates[1] << "\t" <<
+    std::setprecision(4) << pageFaultRates[2] << "\t" <<
+    std::setprecision(4) << pageFaultRates[3] << "\t" <<
+    std::setprecision(4) << pageFaultRates[4] << "\n";
 }
 
+/// @brief Optimal Algorithm
+/// @param frameSize Frame size specified by the user through the parameter list
+/// @param references All integer values that were provided through the input file
+/// @param fout Output file to write to
 void optimal(int frameSize, std::vector<int> references, std::ofstream& fout) {
     std::vector<double> pageFaultRates;
     std::vector<int> currentPages;
     std::vector<int> temp(frameSize, -1);
     int pageFaults = 0;
+    // Variable to store which page reference needs to be replaced since we are not circular or anything we need to be 
+    // able to store where the page that should be replaced is
     int positionToReplace = -1;
+    // If this is set to true then it means the currently referenced page is no in the rest of the input file
     bool noFutureReferenceFlag = false;
 
     // Start looping through all provided references
@@ -115,7 +123,7 @@ void optimal(int frameSize, std::vector<int> references, std::ofstream& fout) {
                 // Find and store items which are present in currentPages and in the future references into a temp vector
                 for (int j = 0; j < currentPages.size(); ++j) {
                     for (int k = i + 1; k < currentPages.size(); ++k) {
-                        // Check if 
+                        // Check if the currently referenced page in the current pages vector is present in the "future references" part of the input file
                         if (currentPages[j] == references[k]) {
                             temp[j] = k;
                         }
@@ -165,9 +173,9 @@ void optimal(int frameSize, std::vector<int> references, std::ofstream& fout) {
     pageFaultRates.push_back(static_cast<double>(pageFaults) / references.size());
 
     fout << "OPTIMAL\t" << pageFaults << "\t" << 
-    pageFaultRates[0] << "\t" <<
-    pageFaultRates[1] << "\t" <<
-    pageFaultRates[2] << "\t" <<
-    pageFaultRates[3] << "\t" <<
-    pageFaultRates[4] << "\n";
+    std::setprecision(4) << pageFaultRates[0] << "\t" <<
+    std::setprecision(4) << pageFaultRates[1] << "\t" <<
+    std::setprecision(4) << pageFaultRates[2] << "\t" <<
+    std::setprecision(4) << pageFaultRates[3] << "\t" <<
+    std::setprecision(4) << pageFaultRates[4] << "\n";
 }
