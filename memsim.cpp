@@ -36,7 +36,7 @@ void fifo(int frameSize, std::vector<int> references, std::ofstream& fout) {
         }
 
         // If i is evenly divisible by 2000, add the calculated page fault rate for all concurrent page faults to the page fault rate vector
-        if (i > 0 && i % 2000 == 0 ) {
+        if (i > 0 && i % 2000 == 0) {
             // cout << "Segmentation Fault not yet occured!\n";
             pageFaultRates.push_back(static_cast<double>(pageFaults) / i);
         }
@@ -83,7 +83,7 @@ void lru(int frameSize, std::vector<int> references, std::ofstream& fout) {
         }
 
         // If i is evenly divisible by 2000, add the calculated page fault rate for all concurrent page faults to the page fault rate vector
-        if (i > 0 && i % 2000 == 0 ) {
+        if (i > 0 && i % 2000 == 0) {
             pageFaultRates.push_back(static_cast<double>(pageFaults) / i);
         }
     }
@@ -106,32 +106,54 @@ void lru(int frameSize, std::vector<int> references, std::ofstream& fout) {
 void optimal(int frameSize, std::vector<int> references, std::ofstream& fout) {
     std::vector<double> pageFaultRates;
     std::vector<int> currentPages;
-    std::vector<int> temp(frameSize, -1);
+    // Stores indexes of furthest instance of each item in the currentPages vector
     int pageFaults = 0;
     // Variable to store which page reference needs to be replaced since we are not circular or anything we need to be 
     // able to store where the page that should be replaced is
     int positionToReplace = -1;
+<<<<<<< HEAD
     // If this is set to true then it means the currently referenced page is no in the rest of the input file
     bool noFutureReferenceFlag = false;
 
+=======
+    
+    // cout << "currentPages.size(): " << currentPages.size() << "\n";
+    
+>>>>>>> ef2a1bf9e4634c7cfb406a12b3789b8744d87713
     // Start looping through all provided references
     for (int i = 0; i < references.size(); ++i) {
+        std::vector<int> temp(frameSize, -1);
+        bool noFutureReferenceFlag = false;
         // If the reference is not found in the list of pages in the table, page fault will occur
         if (std::find(currentPages.begin(), currentPages.end(), references[i]) == currentPages.end()) {
             // If the list is full, erase the item furthest away from the current index
             if (currentPages.size() >= frameSize) {
                 // Find and store items which are present in currentPages and in the future references into a temp vector
                 for (int j = 0; j < currentPages.size(); ++j) {
+<<<<<<< HEAD
                     for (int k = i + 1; k < currentPages.size(); ++k) {
                         // Check if the currently referenced page in the current pages vector is present in the "future references" part of the input file
+=======
+                    // cout << "Starting inner 'k' for loop where i = " << i << "\n";
+                    for (int k = i + 1; k < references.size(); ++k) {
+                        // cout << "j = " << j << "\tk = " << k << "\n";
+                        // cout << "currentPages[" << j << "] = " << currentPages[j] << "\treferences[" << k << "] = " << references[k] << "\n";
+                        // cout << "Checking currentPages[" << j << "] == references[" << k << "]: " << (currentPages[j] == references[k]) << "\n";
+>>>>>>> ef2a1bf9e4634c7cfb406a12b3789b8744d87713
                         if (currentPages[j] == references[k]) {
+                            // cout << "j = " << j << "\tk = " << k << "\n";
+                            // cout << "Setting temp[" << j << "] = " << k << "\n";
                             temp[j] = k;
                         }
                     }
                 }
 
+                // cout << "Found all future references\n";
+
                 // If any item is in currentPages but not in future references, that item should be the one replaced
                 for (int j = 0; j < frameSize; ++j) {
+                    // cout << "j = " << j << "\n";
+                    // cout << "temp[" << j << "] == -1: " << (temp[j] == -1) << "\n";
                     if (temp[j] == -1) {
                         positionToReplace = j;
                         noFutureReferenceFlag = true;
@@ -139,32 +161,51 @@ void optimal(int frameSize, std::vector<int> references, std::ofstream& fout) {
                     }
                 }
 
+                // cout << "Checked for changing position to replace to location of -1 in temp\n";
+
                 // If all items have future refernces, find whichever one is furthest away and replace that one
                 if(!noFutureReferenceFlag) {
                     // Default value is no further one is found
                     int max = temp[0];
                     positionToReplace = 0;
+
+                    // cout << "positionToReplace = 0\n";
                     
                     // Find the value that is furthest away - defined by whichever "k" value is largest (index in references)
                     for (int j = 0; j < frameSize; ++j) {
                         if (temp[j] > max) {
+                            // cout << temp[j] << " > " << max << "\n";
                             max = temp[j];
                             positionToReplace = j;
                         }
                     }
                 }
 
+                // cout << "Finished checking !noFutureReferenceFlag\n";
+
                 currentPages[positionToReplace] = references[i];
             }
-            // Add the new item to the back
+            // Add the new item to the back of the list if it is not yet full
             else {
                 currentPages.push_back(references[i]);
             }
+            // cout << "This run - i = " << i << " - resulted in a page fault, increasing page fault counter now\n";
             pageFaults++;
         }
+        else {
+            // cout << "This run - i = " << i << " - resulted in a hit\n";
+        }
+
+        // cout << "Num page faults: " << pageFaults << "\n";
+
+        // cout << "[ ";
+        for (int j = 0; j < currentPages.size(); ++j) {
+            // cout << currentPages[j] << " ";
+        }
+        // cout << "]\n\n";
 
         // If i is evenly divisible by 2000, add the calculated page fault rate for all concurrent page faults to the page fault rate vector
-        if (i > 0 && i % 2000 == 0 ) {
+        if (i > 0 && i % 2000 == 0) {
             pageFaultRates.push_back(static_cast<double>(pageFaults) / i);
         }
     }

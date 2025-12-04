@@ -61,6 +61,7 @@ int main(int argc, char* argv[]) {
 
     fifo(frameSize, references, fout);
     lru(frameSize, references, fout);
+    // cout << "Running optimal\n";
     optimal(frameSize, references, fout);
 
     fout.close();
