@@ -34,17 +34,6 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    /** Next Steps
-     *  1. Call FIFO page replacement algorithm - do this for the specified frame size that was sent in by the user.
-     *      a. Receive the page fault rates as an array of floats.
-     *      b. There will be 5 total entires in this returned array, where the first entry (index 0) is the page fault rate for the first 2000 references, and so on.
-     *      c. These 5 entries will be extracted and written into the specified output file that was given by the user.
-     *  2. Call LRU page replacement algorithm - do this for the specified frame size that was sent in by the user.
-     *      a. Do the same thing as for FIFO but now with LRU
-     *  3. Call OPT page replacement algorithm - do this for the specified frame size that was sent in by the user.
-     *      a. Do the same thing as for FIFO but now with OPT
-     */
-
     // cout << "Before processing references\n";
     std::vector<int> references;
     int value;
